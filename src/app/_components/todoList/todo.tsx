@@ -1,6 +1,6 @@
-'use client'
-import React from 'react'
-import { Button } from '~/components/ui/button'
+"use client";
+import React from "react";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,87 +8,87 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '~/components/ui/dialog'
-import { Input } from '~/components/ui/input'
-import { Label } from '~/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group'
-import { cn } from '~/lib/utils'
-import { api } from '~/trpc/react'
+} from "~/components/ui/dialog";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 export default function TodoList() {
-  const [deleteLoading, setDeleteLoading] = React.useState(false)
-  const [generateLoading, setGenerateLoading] = React.useState(false)
-  const [editLoading, setEditLoading] = React.useState(false)
-  const [status, setStatus] = React.useState([0, 1])
-  const getTodos = api.todo.getTodos.useQuery({ statuses: status })
+  const [deleteLoading, setDeleteLoading] = React.useState(false);
+  const [generateLoading, setGenerateLoading] = React.useState(false);
+  const [editLoading, setEditLoading] = React.useState(false);
+  const [status, setStatus] = React.useState([0, 1]);
+  const getTodos = api.todo.getTodos.useQuery({ statuses: status });
   const checkTodos = api.todo.completeAllTodos.useMutation({
     onSettled: () => {
-      getTodos.refetch()
+      getTodos.refetch();
     },
-  })
+  });
   const deleteTodos = api.todo.deleteTodo.useMutation({
     onSettled: () => {
-      getTodos.refetch()
+      getTodos.refetch();
     },
-  })
+  });
   const toggleTodo = api.todo.toggleTodo.useMutation({
     onSettled: () => {
-      getTodos.refetch()
+      getTodos.refetch();
     },
-  })
+  });
   const addTodo = api.todo.addTodo.useMutation({
     onSettled: () => {
-      getTodos.refetch()
+      getTodos.refetch();
     },
-  })
+  });
   const generateTodos = api.todo.generateTodo.useMutation({
     onMutate: () => {
-      setGenerateLoading(true)
+      setGenerateLoading(true);
     },
     onError: () => {
-      setGenerateLoading(false)
+      setGenerateLoading(false);
     },
     onSuccess: () => {
-      getTodos.refetch()
-      setGenerateLoading(false)
+      getTodos.refetch();
+      setGenerateLoading(false);
     },
-  })
+  });
   const editTodo = api.todo.editTodo.useMutation({
     onMutate: () => {
-      setEditLoading(true)
+      setEditLoading(true);
     },
     onSuccess: () => {
-      getTodos.refetch()
-      setEditLoading(false)
+      getTodos.refetch();
+      setEditLoading(false);
     },
-  })
+  });
   const deleteAllTodos = api.todo.deleteAllTodos.useMutation({
     onMutate: () => {
-      setDeleteLoading(true)
+      setDeleteLoading(true);
     },
     onError: () => {
-      setDeleteLoading(false)
+      setDeleteLoading(false);
     },
     onSuccess: () => {
-      getTodos.refetch()
-      setDeleteLoading(false)
+      getTodos.refetch();
+      setDeleteLoading(false);
     },
-  })
+  });
   const handleDelete = () => {
-    setDeleteLoading(true)
-    deleteAllTodos.mutate()
-    setDeleteLoading(false)
-  }
+    setDeleteLoading(true);
+    deleteAllTodos.mutate();
+    setDeleteLoading(false);
+  };
   const handleCheck = () => {
-    checkTodos.mutate()
-  }
-  const [todoItem, setTodoItem] = React.useState('')
+    checkTodos.mutate();
+  };
+  const [todoItem, setTodoItem] = React.useState("");
 
   const handleAddTodo = () => {
     if (todoItem.length) {
-      addTodo.mutate({ title: todoItem, status: 0 })
-      setTodoItem('')
+      addTodo.mutate({ title: todoItem, status: 0 });
+      setTodoItem("");
     }
-  }
+  };
 
   return (
     <div className="mx-auto w-full max-w-4xl ">
@@ -105,43 +105,43 @@ export default function TodoList() {
         />
         <Button onClick={handleAddTodo}>Add Todo</Button>
         <Button
-          variant={'secondary'}
+          variant={"secondary"}
           onLoad={() => setGenerateLoading(true)}
           onClick={() => generateTodos.mutate()}
         >
-          {generateLoading ? 'Generating...' : 'Generate Todos'}
+          {generateLoading ? "Generating..." : "Generate Todos"}
         </Button>
         <Button variant="destructive" onClick={handleCheck}>
-          {deleteLoading ? 'Checking...' : 'Check All'}
+          {deleteLoading ? "Checking..." : "Check All"}
         </Button>
-        <Button variant={'destructive'} onClick={handleDelete}>
-          {deleteLoading ? 'Deleting...' : 'Delete All'}
+        <Button variant={"destructive"} onClick={handleDelete}>
+          {deleteLoading ? "Deleting..." : "Delete All"}
         </Button>
       </div>
       <div className="mt-4 flex flex-row gap-2 ">
         <Button
-          variant={'outline'}
+          variant={"outline"}
           onClick={() => {
-            setStatus([0, 1])
-            getTodos.refetch()
+            setStatus([0, 1]);
+            getTodos.refetch();
           }}
         >
           All
         </Button>
         <Button
-          variant={'outline'}
+          variant={"outline"}
           onClick={() => {
-            setStatus([0])
-            getTodos.refetch()
+            setStatus([0]);
+            getTodos.refetch();
           }}
         >
           Incompleted
         </Button>
         <Button
-          variant={'outline'}
+          variant={"outline"}
           onClick={() => {
-            setStatus([1])
-            getTodos.refetch()
+            setStatus([1]);
+            getTodos.refetch();
           }}
         >
           Completed
@@ -156,8 +156,8 @@ export default function TodoList() {
               <div
                 key={todo.id}
                 className={cn(
-                  todo.status === 1 ? 'bg-green-200 ' : '',
-                  'mt-2 flex items-center gap-2 border p-2',
+                  todo.status === 1 ? "bg-green-200 " : "",
+                  "mt-2 flex items-center gap-2 border p-2",
                 )}
               >
                 <input
@@ -167,21 +167,21 @@ export default function TodoList() {
                     toggleTodo.mutate({
                       id: todo.id,
                       status: todo.status === 0 ? 1 : 0,
-                    })
+                    });
                   }}
                   checked={todo.status === 1}
                   key={todo.id}
                 />
                 <span
                   className={cn(
-                    todo.status === 1 ? 'line-through' : '',
-                    'flex-grow font-lg text-primary',
+                    todo.status === 1 ? "line-through" : "",
+                    "flex-grow font-lg text-primary",
                   )}
                 >
                   {todo.title}
                 </span>
                 <span className="text-gray-500 text-sm">
-                  {todo.createdAt.toISOString().split('T')[0]}
+                  {todo.createdAt.toISOString().split("T")[0]}
                 </span>
                 {todo.status === 0 ? (
                   <>
@@ -194,7 +194,7 @@ export default function TodoList() {
                           <DialogTitle>Edit Todo</DialogTitle>
                           <DialogDescription className="flex flex-col gap-2">
                             <div>
-                              {' '}
+                              {" "}
                               <Input
                                 type="text"
                                 placeholder={todo.title}
@@ -210,11 +210,11 @@ export default function TodoList() {
                                     value="in-complete"
                                     id="in-complete"
                                     onClick={(e) => {
-                                      e.preventDefault()
+                                      e.preventDefault();
                                       toggleTodo.mutate({
                                         id: todo.id,
                                         status: 0,
-                                      })
+                                      });
                                     }}
                                   />
                                   <Label htmlFor="in-complete">
@@ -226,12 +226,12 @@ export default function TodoList() {
                                     value="complete"
                                     id="complete"
                                     onClick={(e) => {
-                                      e.preventDefault()
+                                      e.preventDefault();
 
                                       toggleTodo.mutate({
                                         id: todo.id,
                                         status: 1,
-                                      })
+                                      });
                                     }}
                                   />
                                   <Label htmlFor="complete">complete</Label>
@@ -244,11 +244,11 @@ export default function TodoList() {
                                 editTodo.mutate({
                                   id: todo.id,
                                   title: todoItem,
-                                })
-                                setTodoItem('')
+                                });
+                                setTodoItem("");
                               }}
                             >
-                              {editLoading ? 'Editing...' : 'Edit'}
+                              {editLoading ? "Editing..." : "Edit"}
                             </Button>
                           </DialogDescription>
                         </DialogHeader>
@@ -259,9 +259,9 @@ export default function TodoList() {
                   <></>
                 )}
                 <Button
-                  variant={'destructive'}
+                  variant={"destructive"}
                   onClick={() => {
-                    deleteTodos.mutate({ id: todo.id })
+                    deleteTodos.mutate({ id: todo.id });
                   }}
                 >
                   Delete
@@ -272,5 +272,5 @@ export default function TodoList() {
         </div>
       )}
     </div>
-  )
+  );
 }
